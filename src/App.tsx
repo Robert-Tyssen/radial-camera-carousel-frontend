@@ -1,5 +1,5 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
-import { SubmissionForm } from './components/submission-form'
+import { SubmissionForm } from './components/submission_form'
 
 export const App: React.FC = () => {
 
