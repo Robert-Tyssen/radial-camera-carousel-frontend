@@ -1,6 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { AddressInput } from './components/address_input'
 import { SubmissionForm } from './components/submission_form'
+import { DeviceStatusProvider } from './contexts/DeviceStatusProvider'
 
 export const App: React.FC = () => {
 
@@ -14,7 +15,11 @@ export const App: React.FC = () => {
           <Typography variant="h3">Placeholder Title</Typography>
 
           <AddressInput />
-          <SubmissionForm />
+
+          <DeviceStatusProvider>
+            <SubmissionForm />
+          </DeviceStatusProvider>
+
 
         </Box>
       </Box>
