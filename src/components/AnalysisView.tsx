@@ -27,6 +27,8 @@ export const AnalysisView: React.FC = () => {
   }, [updateStatus]);
 
   const groupedTasks = groupPhotoTasks(analysisStatus.analysisTasks);
+  const completedTasks = analysisStatus.analysisTasks.filter((task) => task.status == 'COMPLETE').length
+  const completedTaskText = `${completedTasks} out of ${analysisStatus.analysisTasks.length} analysis tasks complete`
   console.log(groupedTasks);
 
   return (
@@ -38,6 +40,8 @@ export const AnalysisView: React.FC = () => {
           <RefreshRounded />
         </IconButton>
       </Stack>
+
+      <Typography variant='h6' pb={2}>{completedTaskText}</Typography>
 
       {/* List of photos being analyzed */}
       {Object.entries(groupedTasks).map((gr) =>
@@ -70,7 +74,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
         <Stack direction='row' spacing={2} flexWrap='wrap'>
           {tasks.map((task) => {
 
-            const cameraText = 'Camera # ' + task.cameraId +':';
+            const cameraText = 'Camera # ' + task.cameraId + ':';
             const status = task.status == "IN PROGRESS"
               ? `${task.timeRemaining} SECS REMAINING`
               : task.status
