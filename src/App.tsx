@@ -1,4 +1,5 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
+import { AddressInput } from './components/address_input'
 import { SubmissionForm } from './components/submission_form'
 
 export const App: React.FC = () => {
@@ -12,11 +13,7 @@ export const App: React.FC = () => {
           {/* Main title */}
           <Typography variant="h3">Placeholder Title</Typography>
 
-          {/* Endpoint text input */}
-          <TextField variant='outlined' label='Web Server Address' defaultValue={'http://localhost:0000/'}/>
-          <Button variant='contained' size='large'>Check</Button>
-
-
+          <AddressInput />
           <SubmissionForm />
 
         </Box>

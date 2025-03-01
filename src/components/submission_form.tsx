@@ -84,7 +84,7 @@ export const SubmissionForm: React.FC = () => {
 
           return (
             <Grid2 size={6}>
-              <Paper variant='outlined' sx={{ p: 2, borderRadius: 8 }} >
+              <Paper variant='outlined' sx={{ p: 2, borderRadius: 4 }} >
                 <Stack>
                   <Stack direction={'row'} alignItems={'center'} spacing={2}>
                     <Typography variant='overline'>{name}</Typography>
