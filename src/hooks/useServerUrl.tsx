@@ -8,7 +8,7 @@ const DEFAULT_SERVER_URL = 'http://127.0.0.1:8000'
 const HEARTBEAT_ENDPOINT = '/api/heartbeat-check'
 
 // Expected response from the server to validate heartbeat
-const HEARTBEAT_MESSAGE = 'Connection Successful!'
+const HEARTBEAT_MESSAGE = 'Connection successful!'
 
 // Expected schema of the heartbeat response
 const HeartbeatResponseSchema = z.object({
@@ -35,6 +35,7 @@ const getServerHeartbeatResponse = async (url: string): Promise<{ message: strin
 
     // Return the response if everything is okay
     console.log('Heartbeat success!');
+    console.log(result.data);
     return result.data;
   } catch (error) {
     // Error occured, so log an error and return null
@@ -66,11 +67,14 @@ export const useServerUrl = () => {
     // TODO - add check on URL formatting before remote call
     
     setLoading(true);
+    setError(null);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const { message } = (await getServerHeartbeatResponse(serverUrl)) || { message: '' };
     setLoading(false);
 
     // Check that the expected message was returned
-    if (message === HEARTBEAT_MESSAGE) {
+    if (message == HEARTBEAT_MESSAGE) {
       setError(null);
       setServerUrlValid(true);
       return 
