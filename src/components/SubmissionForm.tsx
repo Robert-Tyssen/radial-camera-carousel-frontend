@@ -1,4 +1,4 @@
-import { DeleteRounded } from "@mui/icons-material";
+import { DeleteRounded, SendRounded } from "@mui/icons-material";
 import { Box, Button, Chip, Grid2, Paper, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
@@ -70,10 +70,14 @@ export const SubmissionForm: React.FC = () => {
     }));
   }
 
+  const submitForm = () => {
+    console.log(photos)
+  }
+
   return (
-    <Box>
+    <Box py={2}>
       <Typography variant='h5' pb={2}>Edit Photos and Camera Selection</Typography>
-      <Grid2 container spacing={2}>
+      <Grid2 container spacing={2} pb={2}>
         {Object.entries(photos).map(([photoId, { name, description, cameras }]) => {
 
           // Convert key back to number for type-compatibility
@@ -135,6 +139,16 @@ export const SubmissionForm: React.FC = () => {
           )
         })}
       </Grid2>
+      {/* Submit button */}
+      <Stack alignItems={'flex-end'}>
+        <Button
+          variant='contained'
+          startIcon={<SendRounded />}
+          onClick={() => submitForm()}
+        >
+          Submit
+        </Button>
+      </Stack>
     </Box>
   )
 }

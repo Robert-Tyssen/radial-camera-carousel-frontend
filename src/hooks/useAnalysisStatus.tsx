@@ -78,6 +78,6 @@ export const useAnalysisStatus = (serverBaseUrl: string, isPollingInit = false) 
   }, [updateStatus, isPolling])
 
   // Expose state objects
-  return { deviceStatus: analysisStatus, loading, error, updateStatus }
+  return { analysisStatus, loading, error, updateStatus }
 
 }
