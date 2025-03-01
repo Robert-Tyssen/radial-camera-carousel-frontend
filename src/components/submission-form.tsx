@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Box, Checkbox, FormControlLabel, Grid2, Typography } from "@mui/material";
+import { Box, Chip, Grid2, Paper, Stack, TextField, Typography } from "@mui/material";
 
 
 interface CameraItem {
@@ -21,22 +21,30 @@ export const SubmissionForm: React.FC = () => {
   return (
     <Box>
       <Typography variant='h5' pb={2}>Edit Photos and Camera Selection</Typography>
-      {photoSlots.map((slot) => (
-        <Accordion>
-          <AccordionSummary>
-            <Typography>{'Photo Slot # ' + (slot + 1)}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <Grid2 container spacing={2}>
-              {cameras.map((camera) => (
-                <Grid2 size={3}>
-                  <FormControlLabel key={camera.id} control={<Checkbox />} label={camera.label} />
-                </Grid2>
-              ))}
-            </Grid2>
-          </AccordionDetails>
-        </Accordion>
-      ))}
+      <Grid2 container spacing={2}>
+        {photoSlots.map((slot) => (
+          <Grid2 size={6}>
+            <Paper variant='outlined' sx={{ p: 2, borderRadius: 8 }} >
+              <Stack>
+                <Typography variant='overline'>{'Photo Slot # ' + (slot + 1)}</Typography>
+                <TextField size='small' variant ='standard' placeholder='Add photo title' margin='dense' sx={{pb: 2}}/>
+              </Stack>
+              <Grid2 container spacing={3}>
+                {cameras.map((camera) => (
+                  <Grid2>
+                    <Chip
+                      label={camera.label}
+                      color="primary"
+                      variant="filled"
+                      onClick={() => { }}
+                    />
+                  </Grid2>
+                ))}
+              </Grid2>
+            </Paper>
+          </Grid2>
+        ))}
+      </Grid2>
     </Box>
   )
 }
