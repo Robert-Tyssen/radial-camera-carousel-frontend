@@ -1,4 +1,5 @@
 import { Box, Button, TextField, Typography } from '@mui/material'
+import { SubmissionForm } from './components/submission-form'
 
 export const App: React.FC = () => {
 
@@ -16,9 +17,9 @@ export const App: React.FC = () => {
           <Button variant='contained' size='large'>Check</Button>
 
 
+          <SubmissionForm />
+
         </Box>
-
-
       </Box>
     </>
   )
