@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { AddressInput } from './components/address_input'
+import { AddressInput } from './components/AddressInput'
 import { AnalysisView } from './components/AnalysisView'
 import { SubmissionForm } from './components/SubmissionForm'
 

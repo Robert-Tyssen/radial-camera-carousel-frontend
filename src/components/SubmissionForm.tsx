@@ -1,5 +1,5 @@
 import { DeleteRounded, SendRounded } from "@mui/icons-material";
-import { Box, Button, Chip, Grid2, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Chip, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 
 
@@ -45,14 +45,15 @@ export const SubmissionForm: React.FC = () => {
   }
 
   // Toggles a camera assignment for a given photo id
-  const toggleCamera = (photoId: number, cameraId: number) => {
+  const setPhotoCamera = (photoId: number, cameraId: number, value: boolean) => {
     setPhotos((prevState) => {
       // Get the cameras currently assigned to the photo id
       const { cameras } = prevState[photoId]
       // Remove camera if currently assigned, otherwise add it
-      const updatedCameras = cameras.includes(cameraId)
-        ? cameras.filter((i) => i !== cameraId)
-        : [...cameras, cameraId]
+      let updatedCameras = [...cameras]
+      if (!value) updatedCameras = cameras.filter((i) => i !== cameraId)
+      if (value && !cameras.includes(cameraId))
+        updatedCameras = [...cameras, cameraId];
 
       // Return updated state with updated cameras for the photo id
       return {
@@ -77,70 +78,81 @@ export const SubmissionForm: React.FC = () => {
   return (
     <Box py={2}>
       <Typography variant='h5' pb={2}>Edit Photos and Camera Selection</Typography>
-      <Grid2 container spacing={2} pb={2}>
-        {Object.entries(photos).map(([photoId, { name, description, cameras }]) => {
 
-          // Convert key back to number for type-compatibility
-          const id = Number(photoId);
+      {Object.entries(photos).map(([photoId, { name, description, cameras }]) => {
 
-          // Check if the photo has user-assigned details
-          const hasDetails = description || cameras.length > 0
+        // Convert key back to number for type-compatibility
+        const id = Number(photoId);
 
-          return (
-            <Grid2 size={6}>
-              <Paper variant='outlined' sx={{ p: 2, borderRadius: 4 }} >
-                <Stack>
-                  <Stack direction={'row'} alignItems={'center'} spacing={2}>
-                    <Typography variant='overline'>{name}</Typography>
+        // Check if the photo has user-assigned details
+        const hasDetails = description || cameras.length > 0
 
-                    <Chip
-                      size='small'
-                      variant='filled'
-                      label={`${cameras.length == 0 ? 'No' : cameras.length} Camera(s) Selected`}
-                      color={cameras.length > 0 ? 'secondary' : 'default'}
-                    />
-
-                    {hasDetails &&
-                      <Button
-                        onClick={() => clearPhoto(id)}
-                        aria-label="clear"
-                        size='small' color='error'
-                        startIcon={<DeleteRounded />}
-                      >
-                        Delete
-                      </Button>
+        return (
+          <Accordion>
+            <AccordionSummary>
+              <Stack direction={'row'} alignItems={'center'} spacing={2}>
+                <Typography variant='overline'>{name}</Typography>
+                <Chip
+                  size='small'
+                  variant='filled'
+                  label={`${cameras.length == 0 ? 'No' : cameras.length} Camera(s) Selected`}
+                  color={cameras.length > 0 ? 'secondary' : 'default'}
+                />
+                <Typography variant='caption'
+                  sx={{
+                    flexGrow: 1,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap"
+                  }}
+                >
+                  {description}
+                </Typography>
+              </Stack>
+            </AccordionSummary>
+            <AccordionDetails>
+              <TextField
+                fullWidth
+                sx={{ pb: 2 }}
+                variant='filled'
+                label='(Optional) Photo Description'
+                value={description}
+                onChange={(e) => setPhotoDescription(id, e.target.value)}
+              />
+              <Typography pb={2}>Select Cameras to Analyze Photo:</Typography>
+              <Stack direction='row' flexWrap='wrap' sx={{ gap: 2 }}>
+                {cameraOptions.map((opt) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={cameras.includes(opt.id)}
+                        onChange={(_evt, val) => setPhotoCamera(id, opt.id, val)}
+                      />
                     }
-                  </Stack>
-                  <TextField
-                    sx={{ pb: 2 }}
-                    size='small'
-                    variant='standard'
-                    placeholder='Add photo title'
-                    margin='dense'
-                    value={description}
-                    onChange={(e) => setPhotoDescription(id, e.target.value)}
+                    label={opt.label}
                   />
 
-                  <Grid2 container spacing={2}>
-                    {cameraOptions.map((opt) => (
-                      <Grid2>
-                        <Chip
-                          label={opt.label}
-                          color="primary"
-                          variant={cameras.includes(opt.id) ? "filled" : "outlined"}
-                          onClick={() => toggleCamera(id, opt.id)}
-                        />
-                      </Grid2>
-                    ))}
-                  </Grid2>
-                </Stack>
-              </Paper>
-            </Grid2>
-          )
-        })}
-      </Grid2>
+                ))}
+              </Stack>
+            </AccordionDetails>
+            <AccordionActions>
+              {hasDetails &&
+                <Button
+                  onClick={() => clearPhoto(id)}
+                  aria-label="clear"
+                  size='small' color='error'
+                  startIcon={<DeleteRounded />}
+                >
+                  Delete
+                </Button>
+              }
+            </AccordionActions>
+          </Accordion>
+        )
+      })}
+
       {/* Submit button */}
-      <Stack alignItems={'flex-end'}>
+      <Stack alignItems={'flex-end'} py={2}>
         <Button
           variant='contained'
           startIcon={<SendRounded />}

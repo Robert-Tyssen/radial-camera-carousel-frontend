@@ -59,7 +59,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
   const allComplete = complete == tasks.length
 
   return (
-    <Accordion >
+    <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreRounded />}>
         <Stack direction={'row'} spacing={2} alignItems={'center'}>
           <Typography>{description}</Typography>
