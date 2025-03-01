@@ -1,6 +1,7 @@
 import { DeleteRounded, SendRounded } from "@mui/icons-material";
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Chip, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
 import { useState } from "react";
+import { useAnalysisSubmission } from "../hooks/useAnalysisSubmission";
 
 
 interface CameraItem {
@@ -34,6 +35,8 @@ const cameraOptions: CameraItem[] = [
 ]
 
 export const SubmissionForm: React.FC = () => {
+
+  const submissionHook = useAnalysisSubmission();
 
   const [photos, setPhotos] = useState(initialPhotoState);
 
@@ -72,7 +75,8 @@ export const SubmissionForm: React.FC = () => {
   }
 
   const submitForm = () => {
-    console.log(photos)
+    // TODO - pass actual address
+    submissionHook.submitAnalysis('http://127.0.0.1:8000/');
   }
 
   return (

@@ -71,7 +71,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack direction='row' spacing={2} flexWrap='wrap'>
+        <Stack direction='row' flexWrap='wrap' sx={{gap: 2}}>
           {tasks.map((task) => {
 
             const cameraText = 'Camera # ' + task.cameraId + ':';
@@ -89,7 +89,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
               default:
             }
             return (
-              <Stack direction='row' spacing={1}>
+              <Stack direction='row' spacing={2}>
                 <Typography fontWeight='bold'>{cameraText}</Typography>
                 <Typography color={statusColor}>{status}</Typography>
               </Stack>
