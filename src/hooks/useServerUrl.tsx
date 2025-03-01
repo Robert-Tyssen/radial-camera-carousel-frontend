@@ -30,7 +30,7 @@ const getServerHeartbeatResponse = async (url: string): Promise<{ message: strin
     const result = HeartbeatResponseSchema.safeParse(json);
     if (!result.success) {
       console.error("❌ Invalid response format:", result.error);
-      return null; // or throw a custom error if you prefer
+      return null;
     }
 
     // Return the response if everything is okay
@@ -77,7 +77,7 @@ export const useServerUrl = () => {
     if (message == HEARTBEAT_MESSAGE) {
       setError(null);
       setServerUrlValid(true);
-      return 
+      return;
     }
 
     // Expected response was not returned, so set the error message
