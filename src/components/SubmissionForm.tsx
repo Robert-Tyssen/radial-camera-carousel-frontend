@@ -1,39 +1,9 @@
 import { DeleteRounded, SendRounded } from "@mui/icons-material";
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Chip, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import { useAnalysisSubmission } from "../hooks/useAnalysisSubmission";
+import { useContext } from "react";
 import { ServerAddressContext } from "../contexts/ServerAddressProvider";
-
-
-interface CameraItem {
-  id: number,
-  label: string,
-}
-
-// Type to store the state for a given photo slot
-interface PhotoSlotState {
-  // Name of the slot (i.e. "Photo Slot #1")
-  name: string,
-  // Optional description of the photo
-  description: string,
-  // List of camera ids selected (e.g. 0, ..., 7)
-  cameras: number[],
-}
-
-// Set of states for each individual photo slot
-type PhotoSetState = Record<number, PhotoSlotState>;
-
-// Initial empty state where no photos have descriptions or cameras assigned
-const initialPhotoState: PhotoSetState = Object.fromEntries(
-  Array.from({ length: 16 }, (_, i) => [i, { name: 'Photo Slot #' + (i + 1), description: '', cameras: [] }])
-)
-
-const cameraOptions: CameraItem[] = [
-  { id: 0, label: 'Red', }, { id: 1, label: 'Orange', },
-  { id: 2, label: 'Yellow', }, { id: 3, label: 'Green', },
-  { id: 4, label: 'Blue', }, { id: 5, label: 'Indigo', },
-  { id: 6, label: 'Violet', }, { id: 7, label: 'Ultraviolet', },
-]
+import { useAnalysisSubmission } from "../hooks/useAnalysisSubmission";
+import { cameraSet } from "../models/PhotoCameraModels";
 
 export const SubmissionForm: React.FC = () => {
 
@@ -44,45 +14,27 @@ export const SubmissionForm: React.FC = () => {
     throw new Error('ServerAddressContext must be used within ServerAddressProvider')
   }
 
-  const [photos, setPhotos] = useState(initialPhotoState);
-
+  // Set the description of a photo
   const setPhotoDescription = (photoId: number, description: string) => {
-    setPhotos((prevState) => ({
-      ...prevState,
-      [photoId]: { ...prevState[photoId], description }
-    }));
+    submissionHook.setPhotoDescription(photoId, description);
   }
 
   // Toggles a camera assignment for a given photo id
   const setPhotoCamera = (photoId: number, cameraId: number, value: boolean) => {
-    setPhotos((prevState) => {
-      // Get the cameras currently assigned to the photo id
-      const { cameras } = prevState[photoId]
-      // Remove camera if currently assigned, otherwise add it
-      let updatedCameras = [...cameras]
-      if (!value) updatedCameras = cameras.filter((i) => i !== cameraId)
-      if (value && !cameras.includes(cameraId))
-        updatedCameras = [...cameras, cameraId];
-
-      // Return updated state with updated cameras for the photo id
-      return {
-        ...prevState,
-        [photoId]: { ...prevState[photoId], cameras: updatedCameras }
-      }
-    });
+    submissionHook.setPhotoCamera(photoId, cameraId, value);
   }
 
   // Clears all the user-selected settings from a photo slot
   const clearPhoto = (photoId: number) => {
-    setPhotos((prevState) => ({
-      ...prevState,
-      [photoId]: { ...prevState[photoId], cameras: [], description: '' }
-    }));
+    submissionHook.clearPhoto(photoId);
   }
 
+  // Submit the analysis based on the selected photos and cameras
   const submitForm = () => {
     submissionHook.submitAnalysis(serverContext.serverUrl);
   }
+
+  const photos = submissionHook.photos;
 
   return (
     <Box py={2}>
@@ -130,15 +82,15 @@ export const SubmissionForm: React.FC = () => {
               />
               <Typography pb={2}>Select Cameras to Analyze Photo:</Typography>
               <Stack direction='row' flexWrap='wrap' sx={{ gap: 2 }}>
-                {cameraOptions.map((opt) => (
+                {Object.entries(cameraSet).map(([cameraId, cameraLabel]) => (
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={cameras.includes(opt.id)}
-                        onChange={(_evt, val) => setPhotoCamera(id, opt.id, val)}
+                        checked={cameras.includes(Number(cameraId))}
+                        onChange={(_evt, val) => setPhotoCamera(id, Number(cameraId), val)}
                       />
                     }
-                    label={opt.label}
+                    label={cameraLabel}
                   />
 
                 ))}

@@ -4,6 +4,7 @@ import { useContext, useEffect } from "react";
 import { useAnalysisStatus } from "../hooks/useAnalysisStatus";
 import { AnalysisTaskStatus } from "../models/AnalysisModels";
 import { ServerAddressContext } from "../contexts/ServerAddressProvider";
+import { cameraSet } from "../models/PhotoCameraModels";
 
 type GroupedPhotoTasks = Record<number, AnalysisTaskStatus[]>;
 
@@ -80,7 +81,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
         <Stack direction='row' flexWrap='wrap' sx={{gap: 2}}>
           {tasks.map((task) => {
 
-            const cameraText = 'Camera # ' + task.cameraId + ':';
+            const cameraText = cameraSet[task.cameraId] + ' Camera: ';
             const status = task.status == "IN PROGRESS"
               ? `${task.timeRemaining} SECS REMAINING`
               : task.status
