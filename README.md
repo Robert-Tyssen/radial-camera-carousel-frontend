@@ -26,7 +26,7 @@ Before you begin, ensure you have the following software installed:
 
 1. **Clone the repository**
 ```
-https://github.com/Robert-Tyssen/radial-camera-carousel-frontend.git
+git clone https://github.com/Robert-Tyssen/radial-camera-carousel-frontend.git
 cd radial-camera-carousel-frontend
 ```
 
