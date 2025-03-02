@@ -4,10 +4,13 @@ import { useContext } from "react";
 import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 import { useAnalysisSubmission } from "../hooks/useAnalysisSubmission";
 import { cameraSet } from "../models/PhotoCameraModels";
+import { ANALYSIS_IN_PROGRESS_ERROR } from "../models/AnalysisModels";
+import { useNavigate } from "react-router-dom";
 
 export const SubmissionForm: React.FC = () => {
 
   const submissionHook = useAnalysisSubmission();
+  const navigate = useNavigate();
 
   const serverContext = useContext(ServerAddressContext);
   if (!serverContext) {
@@ -119,10 +122,19 @@ export const SubmissionForm: React.FC = () => {
             First validate server URL in order to submit
           </Typography>
         }
-        {serverContext.serverUrlValid && submissionHook.error &&
+        {serverContext.serverUrlValid &&
+          submissionHook.error &&
+          submissionHook.error !== ANALYSIS_IN_PROGRESS_ERROR &&
           <Typography variant='body2' color='error' fontWeight='bold'>
             {submissionHook.error}
           </Typography>
+        }
+        {serverContext.serverUrlValid &&
+          submissionHook.error &&
+          submissionHook.error === ANALYSIS_IN_PROGRESS_ERROR &&
+          <Button variant='text' color='info' onClick={() => navigate('/analyze')}>
+            Analysis In Progress - Click to View
+          </Button>
         }
         <Button
           variant='contained'

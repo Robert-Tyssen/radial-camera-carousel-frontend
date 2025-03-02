@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { AnalysisRequest } from "../models/AnalysisModels";
-import { numberOfCameras, PhotoSetState } from "../models/PhotoCameraModels";
 import { useNavigate } from "react-router-dom";
+import { ANALYSIS_IN_PROGRESS_ERROR, AnalysisRequest } from "../models/AnalysisModels";
+import { numberOfCameras, PhotoSetState } from "../models/PhotoCameraModels";
 
 // Endpoint to use on the server to submit the analysis
 const ANALYSIS_SUBMIT_ENDPOINT = '/api/submit-analysis'
@@ -27,6 +27,10 @@ const submitAnalysisRequest = async (baseUrl: string, req: AnalysisRequest): Pro
 
     // Validate that an OK status response was received
     if (!response.ok) {
+      // Check for common 'analysis-in-progress' error for separate handling
+      const { error } = await response.json();
+      if (error == ANALYSIS_IN_PROGRESS_ERROR) return error;
+
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 

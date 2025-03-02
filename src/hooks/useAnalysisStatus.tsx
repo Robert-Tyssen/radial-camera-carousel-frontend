@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { AnalysisResponseSchema, AnalysisStatus } from "../models/AnalysisModels";
 
 // Time interval (milliseconds) between automatic polls for status updates
-const API_POLL_INTERVAL = 1000;
+const API_POLL_INTERVAL = 2000;
 
 // Endpoint to use on the server to get the analysis status
 const ANALYSIS_STATE_ENDPOINT = '/api/analysis-state'
@@ -31,8 +31,6 @@ const getAnalysisStatus = async (serverBaseUrl: string): Promise<AnalysisStatus 
       return null;
     }
 
-    console.log('Analysis status success!');
-    console.log(result.data);
     return result.data;
   } catch (error) {
     console.error("❌ Fetch failed:", error);
@@ -45,7 +43,7 @@ export const useAnalysisStatus = (serverBaseUrl: string, isPollingInit = false) 
   const [analysisStatus, setAnalysisStatus] = useState<AnalysisStatus>(defaultAnalysisStatus);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isPolling, ] = useState(isPollingInit);
+  const [isPolling, setIsPolling] = useState(isPollingInit);
 
   // Callback to update the status of the 
   const updateStatus = useCallback(async () => {
@@ -78,6 +76,6 @@ export const useAnalysisStatus = (serverBaseUrl: string, isPollingInit = false) 
   }, [updateStatus, isPolling])
 
   // Expose state objects
-  return { analysisStatus, loading, error, updateStatus }
+  return { analysisStatus, loading, error, isPolling, setIsPolling, updateStatus }
 
 }

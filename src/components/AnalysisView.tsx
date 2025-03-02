@@ -1,9 +1,9 @@
 import { ExpandMoreRounded, RefreshRounded } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton, Stack, Typography } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, Chip, FormControlLabel, Stack, Switch, Typography } from "@mui/material";
 import { useContext, useEffect } from "react";
+import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 import { useAnalysisStatus } from "../hooks/useAnalysisStatus";
 import { AnalysisTaskStatus } from "../models/AnalysisModels";
-import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 import { cameraSet } from "../models/PhotoCameraModels";
 
 type GroupedPhotoTasks = Record<number, AnalysisTaskStatus[]>;
@@ -26,26 +26,41 @@ export const AnalysisView: React.FC = () => {
   }
 
   // TODO - pass actual URL as input
-  const { analysisStatus, loading, updateStatus } = useAnalysisStatus(serverContext.serverUrl, false);
+  const { analysisStatus, loading, updateStatus, isPolling, setIsPolling } = useAnalysisStatus(serverContext.serverUrl, true);
 
+
+  // Perform an update request on initial load, 
+  // and set automatic polling until analysis is complete
   useEffect(() => {
     updateStatus();
+    setIsPolling(true)
 
-  }, [updateStatus]);
+    if (!analysisStatus.inProgress) setIsPolling(false)
+
+  }, [updateStatus, analysisStatus.inProgress, setIsPolling]);
+
 
   const groupedTasks = groupPhotoTasks(analysisStatus.analysisTasks);
   const completedTasks = analysisStatus.analysisTasks.filter((task) => task.status == 'COMPLETE').length
   const completedTaskText = `${completedTasks} out of ${analysisStatus.analysisTasks.length} analysis tasks complete`
-  console.log(groupedTasks);
 
   return (
     <Box>
       {/* Section header */}
       <Stack direction='row' justifyContent={'space-between'} alignItems={'center'} pb={2}>
         <Typography variant='h5'>Analysis Status</Typography>
-        <IconButton loading={loading} onClick={updateStatus}>
-          <RefreshRounded />
-        </IconButton>
+
+        <Stack direction='row' spacing={2}>
+          <Button loading={loading} onClick={updateStatus} loadingPosition='start' startIcon={<RefreshRounded />}>
+            Refresh Status
+          </Button>
+          <FormControlLabel
+            control={
+              <Switch checked={isPolling} onChange={(_evt, val) => setIsPolling(val)} />
+            }
+            label="Automatic Updates"
+          />
+        </Stack>
       </Stack>
 
       <Typography variant='h6' pb={2}>{completedTaskText}</Typography>
