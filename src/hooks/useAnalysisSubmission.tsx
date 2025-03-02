@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { AnalysisRequest } from "../models/AnalysisModels";
 import { numberOfCameras, PhotoSetState } from "../models/PhotoCameraModels";
+import { useNavigate } from "react-router-dom";
 
 // Endpoint to use on the server to submit the analysis
 const ANALYSIS_SUBMIT_ENDPOINT = '/api/submit-analysis'
@@ -45,6 +46,8 @@ export const useAnalysisSubmission = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   // Set the description of the phot
   const setPhotoDescription = (photoId: number, description: string) => {
@@ -98,7 +101,7 @@ export const useAnalysisSubmission = () => {
         .map(([photoId, photoState]) => [Number(photoId), photoState.cameras])
     );
 
-    
+
     // Trigger service to submit request
     const error = await submitAnalysisRequest(serverBaseUrl, request);
     setIsSubmitting(false);
@@ -111,7 +114,7 @@ export const useAnalysisSubmission = () => {
 
     // No error, submission was successful
     setSubmitSuccess(true);
-
+    navigate('/analyze');
   }
 
   // Expose details and actions for consumption

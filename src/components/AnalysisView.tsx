@@ -51,10 +51,11 @@ export const AnalysisView: React.FC = () => {
       <Typography variant='h6' pb={2}>{completedTaskText}</Typography>
 
       {/* List of photos being analyzed */}
-      {Object.entries(groupedTasks).map((gr) =>
-        <GroupedPhotoTaskView id={Number(gr[0])} tasks={gr[1]} />
-      )}
-
+      <div>
+        {Object.entries(groupedTasks).map((gr) =>
+          <GroupedPhotoTaskView id={Number(gr[0])} tasks={gr[1]} />
+        )}
+      </div>
     </Box>
   )
 }
@@ -78,7 +79,7 @@ const GroupedPhotoTaskView: React.FC<{ id: number, tasks: AnalysisTaskStatus[] }
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack direction='row' flexWrap='wrap' sx={{gap: 2}}>
+        <Stack direction='row' flexWrap='wrap' sx={{ gap: 2 }}>
           {tasks.map((task) => {
 
             const cameraText = cameraSet[task.cameraId] + ' Camera: ';
