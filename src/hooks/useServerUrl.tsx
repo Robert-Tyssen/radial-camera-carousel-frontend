@@ -68,9 +68,10 @@ export const useServerUrl = () => {
     
     setLoading(true);
     setError(null);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setServerUrlValid(false);
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const { message } = (await getServerHeartbeatResponse(serverUrl)) || { message: '' };
+    const { message } = (await getServerHeartbeatResponse(serverUrl)) || { message: 'ERROR' };
     setLoading(false);
 
     // Check that the expected message was returned

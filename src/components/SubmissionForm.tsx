@@ -130,7 +130,6 @@ export const SubmissionForm: React.FC = () => {
           </Typography>
         }
         {serverContext.serverUrlValid &&
-          submissionHook.error &&
           submissionHook.error === ANALYSIS_IN_PROGRESS_ERROR &&
           <Button variant='text' color='info' onClick={() => navigate('/analyze')}>
             Analysis In Progress - Click to View
