@@ -1,54 +1,55 @@
-# React + TypeScript + Vite
+# Radial Camera Carousel Frontend Repository
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Overview
 
-Currently, two official plugins are available:
+This repository is the frontend component of the Radial Camera Carousel proof-of-concept, developed using Vite and React frameworks. More detail on the backend application and overall design of the Radial Camera Carousel can be found at its Github repository, [here](https://github.com/Robert-Tyssen/Radial-Camera-Carousel-API).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The front-end provides a simple form interface, where a user uses a dropdown interface to edit details for a set of sixteen photo slots. For each photo slot, a set of eight checkboxes can be used to identify which cameras should analyze the photo, and an optional photo can be submitted. Once all details are completed, the data can be submitted to the backend via its API.
 
-## Expanding the ESLint configuration
+After submission, a separate screen shows the status of the ongoing analysis, including which photos / cameras have completed their analyses, and time remaining for any ongoing analyses.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The frontend connects to the backend server by a user-inputted address field, which can be validated that a successful connection to the server was established. The default address is `http://127.0.0.1:8000` which is the default IP and port for the backend when deployed locally.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Libraries Used
+
+- Vite for TypeScript support and development server
+- React for interactivity
+- React-Router-DOM for routing
+- Zod for schema validation and transformation
+
+## Pre-Requisites
+Before you begin, ensure you have the following software installed:
+- Node.js (v16 or higher, 22.12.0 recommended): [Download Node.js](https://nodejs.org/)
+- npm (comes with Node.js)
+  
+## Setup Instructions
+
+1. **Clone the repository**
+```
+git clone https://github.com/Robert-Tyssen/radial-camera-carousel-frontend.git
+cd radial-camera-carousel-frontend
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. **Install dependencies**
 ```
+npm install
+```
+
+3. **Run the development server**
+```
+npm run dev
+```
+
+4. **(Optional) Run in production mode**
+
+Create a production-ready version of the app by running the following command:
+```
+npm run build
+```
+This will generate a `\dist ` folder with the bundled application. The production-ready application can be previewed locally using:
+```
+npm run preview
+```
+
+## License
+This project is licensed under the MIT license.
