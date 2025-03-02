@@ -1,20 +1,24 @@
-import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
-import { useServerUrl } from "../hooks/useServerUrl";
 import { CheckRounded } from "@mui/icons-material";
+import { Box, Button, Paper, Stack, TextField, Typography } from "@mui/material";
+import { useContext } from "react";
+import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 
 
 
 export const AddressInput = () => {
 
-  const serverUrlHook = useServerUrl();
+  const serverContext = useContext(ServerAddressContext);
+  if (!serverContext) {
+    throw new Error('ServerAddressContext must be used within ServerAddressProvider')
+  }
 
-  const message = serverUrlHook.serverUrlValid
+  const message = serverContext.serverUrlValid
     ? 'Server URL is valid!'
-    : (serverUrlHook.error ? serverUrlHook.error : 'Server URL has not been validated')
+    : (serverContext.error ? serverContext.error : 'Server URL has not been validated')
 
   let messageStatus = 'info'
-  if (serverUrlHook.serverUrlValid) messageStatus = 'success';
-  if (serverUrlHook.error) messageStatus = 'error';
+  if (serverContext.serverUrlValid) messageStatus = 'success';
+  if (serverContext.error) messageStatus = 'error';
 
   return (
     <Box>
@@ -27,28 +31,28 @@ export const AddressInput = () => {
             fullWidth
             variant='filled'
             label='Server IP Address'
-            value={serverUrlHook.serverUrl}
-            onChange={(e) => serverUrlHook.updateServerUrl(e.target.value)}
+            value={serverContext.serverUrl}
+            onChange={(e) => serverContext.updateServerUrl(e.target.value)}
             margin='dense'
           />
 
           {/* Button to validate the URL */}
           <Button
             variant='contained'
-            loading={serverUrlHook.loading}
+            loading={serverContext.loading}
             loadingPosition='start'
             startIcon={<CheckRounded />}
-            disabled={!serverUrlHook.serverUrl.trim()}
-            onClick={() => serverUrlHook.validateServerUrl()}
+            disabled={!serverContext.serverUrl.trim()}
+            onClick={() => serverContext.validateServerUrl()}
           >
             Check
           </Button>
         </Stack>
         {/* Status message to indicate if the server is valid */}
-        <Paper sx={{p: 1, borderRadius: 2}} variant='outlined'>
+        <Paper sx={{ p: 1, borderRadius: 2 }} variant='outlined'>
           <Typography variant='body2' color={messageStatus}>{message}</Typography>
         </Paper>
-        
+
       </Stack>
     </Box>
   )

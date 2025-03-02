@@ -1,8 +1,9 @@
 import { ExpandMoreRounded, RefreshRounded } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, IconButton, Stack, Typography } from "@mui/material";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useAnalysisStatus } from "../hooks/useAnalysisStatus";
 import { AnalysisTaskStatus } from "../models/AnalysisModels";
+import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 
 type GroupedPhotoTasks = Record<number, AnalysisTaskStatus[]>;
 
@@ -18,8 +19,13 @@ const groupPhotoTasks = (analysisTasks: AnalysisTaskStatus[]): GroupedPhotoTasks
 
 export const AnalysisView: React.FC = () => {
 
+  const serverContext = useContext(ServerAddressContext);
+  if (!serverContext) {
+    throw new Error('ServerAddressContext must be used within ServerAddressProvider')
+  }
+
   // TODO - pass actual URL as input
-  const { analysisStatus, loading, updateStatus } = useAnalysisStatus('http://127.0.0.1:8000/', false);
+  const { analysisStatus, loading, updateStatus } = useAnalysisStatus(serverContext.serverUrl, false);
 
   useEffect(() => {
     updateStatus();

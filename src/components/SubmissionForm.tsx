@@ -1,7 +1,8 @@
 import { DeleteRounded, SendRounded } from "@mui/icons-material";
 import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Checkbox, Chip, FormControlLabel, Stack, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useAnalysisSubmission } from "../hooks/useAnalysisSubmission";
+import { ServerAddressContext } from "../contexts/ServerAddressProvider";
 
 
 interface CameraItem {
@@ -37,6 +38,11 @@ const cameraOptions: CameraItem[] = [
 export const SubmissionForm: React.FC = () => {
 
   const submissionHook = useAnalysisSubmission();
+
+  const serverContext = useContext(ServerAddressContext);
+  if (!serverContext) {
+    throw new Error('ServerAddressContext must be used within ServerAddressProvider')
+  }
 
   const [photos, setPhotos] = useState(initialPhotoState);
 
@@ -75,8 +81,7 @@ export const SubmissionForm: React.FC = () => {
   }
 
   const submitForm = () => {
-    // TODO - pass actual address
-    submissionHook.submitAnalysis('http://127.0.0.1:8000/');
+    submissionHook.submitAnalysis(serverContext.serverUrl);
   }
 
   return (
@@ -156,11 +161,23 @@ export const SubmissionForm: React.FC = () => {
       })}
 
       {/* Submit button */}
-      <Stack alignItems={'flex-end'} py={2}>
+      <Stack direction='row' justifyContent='flex-end' alignItems='center' py={2} spacing={2}>
+        {!serverContext.serverUrlValid &&
+          <Typography variant='body2' color='info'>
+            First validate server URL in order to submit
+          </Typography>
+        }
+        {serverContext.serverUrlValid && submissionHook.error &&
+          <Typography variant='body2' color='error' fontWeight='bold'>
+            {submissionHook.error}
+          </Typography>
+        }
         <Button
           variant='contained'
           startIcon={<SendRounded />}
           onClick={() => submitForm()}
+          disabled={!serverContext.serverUrlValid}
+          loading={submissionHook.isSubmitting}
         >
           Submit
         </Button>
