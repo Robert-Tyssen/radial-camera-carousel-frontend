@@ -16,6 +16,7 @@ The frontend connects to the backend server by a user-inputted address field, wh
 - React for interactivity
 - React-Router-DOM for routing
 - Zod for schema validation and transformation
+- Material-UI for user interface components and styling 
 
 ## Pre-Requisites
 Before you begin, ensure you have the following software installed:
